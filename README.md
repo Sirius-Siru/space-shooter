@@ -1,2 +1,2 @@
 # space-shooter
-Just a normal SDL2 project
+This is the first game I made, It's unfinished and nothing special!

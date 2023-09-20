@@ -8,6 +8,6 @@
 
 SDL_Texture *loadTexture(const char *filename);
 void prepareScreen();
-void drawTexture(SDL_Texture *texture, int x, int y, int w, int h);
+void drawTexture(SDL_Texture *texture, SDL_Rect rect);
 
 #endif // DRAW_H_INCLUDED

@@ -4,7 +4,7 @@ void getInit(){
     if (SDL_Init(SDL_INIT_VIDEO) < 0){
         exit(1);
     }
-    app.window = SDL_CreateWindow("SDL2_Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1270, 720, SDL_WINDOW_MAXIMIZED);
+    app.window = SDL_CreateWindow("SDL2_Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1270, 720, SDL_WINDOW_SHOWN);
     if (!app.window){
         exit(1);
     }
@@ -14,6 +14,5 @@ void getInit(){
         exit(1);
     }
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-    SDL_GetWindowSize(app.window, &app.winW, &app.winH);
 }
 

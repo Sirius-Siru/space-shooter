@@ -1,27 +1,27 @@
 #include "input.h"
 
 //Set up Entity player struct
-void Player_Setup(){
+void player_setup(){
     memset(&player, 0, sizeof(player));
     player.side = 1;
     player.texture = IMG_LoadTexture(app.renderer, "texture/player.png");
-    player.x = 100;
-    player.y = app.winH / 2;
-    player.w = app.winW * 5/100;
-    player.h = app.winH * 10/100;
+    player.rect.x = 100;
+    player.rect.y = app.winH / 2;
+    player.rect.w = app.winW * 5/100;
+    player.rect.h = app.winH * 10/100;
     player.speed = 13;
 }
 
 //Collision halding when player move out the screen
 void collscr(){
-    if (player.x < 0)
-        player.x = 0;
-    else if (player.x > (app.winW - player.w))
-        player.x = app.winW - player.w;
-    if (player.y < 0)
-        player.y = 0;
-    else if (player.y > (app.winH - player.h))
-        player.y = app.winH -player.h;
+    if (player.rect.x < 0)
+        player.rect.x = 0;
+    else if (player.rect.x > (app.winW - player.rect.w))
+        player.rect.x = app.winW - player.rect.w;
+    if (player.rect.y < 0)
+        player.rect.y = 0;
+    else if (player.rect.y > (app.winH - player.rect.h))
+        player.rect.y = app.winH -player.rect.h;
 }
 
 //Moving velocity
@@ -29,6 +29,7 @@ typedef struct{
     float x, y; 
 } Velocity;
 Velocity velocity;
+
 
 //Moving and shooting bullet
 void solveInput(){
@@ -40,15 +41,18 @@ void solveInput(){
         velocity.x = -1;
     if (player.right)
         velocity.x = 1;
-    if (player.shoot)
-        fireBullet();
+    if (player.shoot && !player.shoot_delay){
+        fireBullet(&player);
+        player.shoot_delay = 16;
+    } else if (player.shoot_delay)
+        player.shoot_delay--;
     float length = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
     if (!length)
         return;
     float normalizeX = velocity.x / length;
     float normalizeY = velocity.y / length; 
-    player.x += player.speed * normalizeX;
-    player.y += player.speed * normalizeY;
+    player.rect.x += player.speed * normalizeX;
+    player.rect.y += player.speed * normalizeY;
     memset(&velocity, 0, sizeof(Velocity));
 }
 
@@ -81,6 +85,26 @@ void dokeyDown(SDL_KeyboardEvent *event){
     }
 }
 
+//Do button up
+void dobuttonDown(SDL_MouseButtonEvent *event){
+    if (event->button == SDL_BUTTON_LEFT)
+        pausegame = false;
+}
+
+//Do button 
+void doButton(){
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+        switch (event.type){
+            case SDL_MOUSEBUTTONDOWN:
+                dobuttonDown(&event.button);
+                break;
+            default:
+                break;
+    }
+}
+
+
 
 //Get input events
 void doInput(){
@@ -95,6 +119,7 @@ void doInput(){
                 break;
             case SDL_KEYUP:
                 dokeyUp(&event.key);
+                break;
             default:
                 break;
         }
@@ -104,7 +129,6 @@ void doInput(){
 void getInput(){
     doInput();
     solveInput();
-    doBullet();
     collscr();
-    drawTexture(player.texture, player.x, player.y, player.w, player.h);
+    drawTexture(player.texture, player.rect);
 }

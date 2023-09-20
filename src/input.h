@@ -1,18 +1,20 @@
 #ifndef INPUT_H_INCLUDED
 #define INPUT_H_INCLUDED
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include "struct.h"
-#include "draw.h"
 #include <vector>
 #include <cmath>
+#include <cstring>
+#include "struct.h"
+#include "draw.h"
+#include "bullet.h"
 
-void Player_Setup();
+void player_setup();
 void collscr();
 void solveInput();
-void dokeyUp();
-void dokeyDown();
+void dokeyUp(SDL_KeyboardEvent *event);
+void dokeyDown(SDL_KeyboardEvent *event);
+void dobuttonDown(SDL_MouseButtonEvent *event);
+void doButton();
 void doInput();
 void getInput();
 

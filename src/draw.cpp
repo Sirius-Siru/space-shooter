@@ -14,11 +14,6 @@ void prepareScreen(){
         SDL_RenderClear(app.renderer);
 }
 
-void drawTexture(SDL_Texture* texture, int x, int y, int w, int h){
-    SDL_Rect rect;
-    rect.x = x;
-    rect.y = y;
-    rect.w = w;
-    rect.h = h;
+void drawTexture(SDL_Texture* texture, SDL_Rect rect){
     SDL_RenderCopy(app.renderer, texture, NULL, &rect);
 }
